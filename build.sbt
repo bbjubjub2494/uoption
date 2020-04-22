@@ -1,12 +1,11 @@
 val dottyVersion = "0.23.0-RC1"
 val scala2Version = "2.13.1"
-crossScalaVersions in ThisBuild := Seq(dottyVersion, "2.13.1")
-scalaVersion in ThisBuild := dottyVersion
 
 lazy val tests = project
   .settings(
     scalaVersion := scala2Version,
     libraryDependencies += "org.scalatest" %% "scalatest" % "3.1.1" % "test",
+    scalacOptions in Test -= "-Xfatal-warnings"
   )
   .dependsOn(`scala-unboxed-option`)
 
@@ -22,5 +21,5 @@ lazy val `scala-unboxed-option` = project.in(file(".")).
       "-encoding", "utf8"
     ),
 
-    scalacOptions in Test -= "-Xfatal-warnings"
+    scalaVersion := dottyVersion,
   )
