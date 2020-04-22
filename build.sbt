@@ -18,7 +18,8 @@ lazy val `scala-unboxed-option` = project.in(file(".")).
       "-deprecation",
       "-feature",
       "-Xfatal-warnings",
-      "-encoding", "utf8"
+      "-encoding", "utf8",
+      "-Yexplicit-nulls",
     ),
 
     scalaVersion := dottyVersion,
