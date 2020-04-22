@@ -23,4 +23,6 @@ lazy val `scala-unboxed-option` = project.in(file(".")).
     ),
 
     scalaVersion := dottyVersion,
+    libraryDependencies +=
+      ("org.scalacheck" %% "scalacheck" % "1.14.3" % Test).withDottyCompat(dottyVersion),
   )
