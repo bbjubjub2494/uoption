@@ -7,6 +7,7 @@ import org.scalatest._
 
 class UOptionTest extends FunSuite {
   test("caveats ==") {
+    given Eql[Any, Any] = Eql.derived
     assert(USome(5) == 5)
     assert(USome(USome(4)) == 4)
   }
