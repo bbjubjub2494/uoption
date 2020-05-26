@@ -1,7 +1,7 @@
 package uoption.test
 
-// this import is the price to pay to use UOptions
 import uoption._
+import UOption.{given _}  // FIXME: companion object implicit scope?
 
 import org.scalatest._
 
@@ -86,7 +86,7 @@ class UOptionTest extends FunSuite {
   }
 
   test("UOption constructor") {
-    assert(UOption(null: String).isEmpty)
+    assert(UOption[String](null).isEmpty)
     assert(UOption("hello") == USome("hello"))
     assert(UOption(UNone: UOption[String]) == USome(UNone))
   }
