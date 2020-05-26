@@ -12,7 +12,6 @@ lazy val `scala-unboxed-option` = project.
       "-feature",
       "-Xfatal-warnings",
       "-encoding", "utf8",
-      "-Yexplicit-nulls",
     ),
 
     libraryDependencies += "org.scalatest" %% "scalatest" % scalatestVersion % Test,
