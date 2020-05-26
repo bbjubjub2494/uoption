@@ -1,14 +1,16 @@
 package uoption
 
 import impl.{wrap, fold}
-type UOption = impl.UOption
+opaque type UOption[+A] = impl.UOption[A]
+private type Sub[A] >: impl.UOption[A] <: UOption[A]
+private type Sup[A] >: UOption[A] <: impl.UOption[A]
 
 val UNone: UOption[Nothing] = impl.UNone
 
 object USome:
   def unapply[A](oa: UOption[A]): Option[A] =
-    fold[A, Option[A]](oa)(None: Option[A])(a => Some(a))
-  def apply[A](a: A): UOption[A] = wrap(a)
+    fold[A, Option[A]](oa: Sup[A])(None: Option[A])(a => Some(a))
+  def apply[A](a: A): UOption[A] = wrap(a): Sub[A]
 
 object UOption:
   def apply[A](a: A | Null): UOption[A] = if a == null then UNone else wrap(a)
@@ -17,7 +19,7 @@ object UOption:
     def isDefined = self.fold(false)(_ => true)
     def isEmpty = !isDefined
 
-    def get = self.fold(throw NoSuchElementException("UNone.get"))(a => a)
+    def get: A = fold(self)(throw NoSuchElementException("UNone.get"))(a => a)
     def iterator: Iterator[A] = fold(self)(Iterator.empty)(Iterator.single)
 
   extension UOptionExtractOps on [A, B >: A](self: UOption[A]):

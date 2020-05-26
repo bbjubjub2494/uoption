@@ -1,7 +1,6 @@
 package uoption.test
 
 import uoption._
-import UOption.{given _}  // FIXME: companion object implicit scope?
 
 import org.scalatest._
 
