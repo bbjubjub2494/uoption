@@ -18,6 +18,7 @@ object UOption:
     def isEmpty = !isDefined
 
     def get = self.fold(throw NoSuchElementException("UNone.get"))(a => a)
+    def iterator: Iterator[A] = fold(self)(Iterator.empty)(Iterator.single)
 
   extension UOptionExtractOps on [A, B >: A](self: UOption[A]):
     def getOrElse(default: => B): B = fold[A, B](self)(default)(a => a: B)
