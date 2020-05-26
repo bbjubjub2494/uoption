@@ -1,7 +1,6 @@
 # scala-unboxed-option
 
-[![Build Status](https://travis-ci.org/sjrd/scala-unboxed-option.svg?branch=master)](https://travis-ci.org/sjrd/scala-unboxed-option)
-[![Scala.js](https://www.scala-js.org/assets/badges/scalajs-0.6.13.svg)](https://www.scala-js.org)
+[![Build Status](https://travis-ci.org/bbjubjub2494/scala-unboxed-option.svg?branch=master)](https://travis-ci.org/bbjubjub2494/scala-unboxed-option)
 
 Scala's `Option[+A]` type is really useful to accurately type optional values.
 Its higher-order methods like `map` and `getOrElse`, as well as its pattern
