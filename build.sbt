@@ -2,19 +2,31 @@ val catsVersion = "2.1.1"
 val dottyVersion = "0.24.0-RC1"
 val scalatestVersion = "3.1.2"
 
-lazy val `scala-unboxed-option` = project.
-  in(file(".")).
-  settings(
-    name := "scala-unboxed-option",
-    version := "0.1-SNAPSHOT",
-    scalaVersion := dottyVersion,
-    scalacOptions ++= Seq(
-      "-deprecation",
-      "-feature",
-      "-Xfatal-warnings",
-      "-encoding", "utf8",
-      "-Yexplicit-nulls",
+lazy val sharedSettings = Seq(
+  version := "0.1-SNAPSHOT",
+  scalaVersion := dottyVersion,
+  scalacOptions ++= Seq(
+    "-deprecation",
+    "-feature",
+    "-Xfatal-warnings",
+    "-encoding", "utf8",
+    "-Yexplicit-nulls",
+  ),
+)
+
+lazy val cats = project
+  .settings(sharedSettings)
+  .settings(
+    libraryDependencies ++= Seq(
+      ("org.typelevel" %% "cats-core" % catsVersion).withDottyCompat(dottyVersion),
     ),
+  )
+  .dependsOn(core)
+
+lazy val core = (project in file("."))
+  .settings(sharedSettings)
+  .settings(
+    name := "scala-unboxed-option",
 
     libraryDependencies += "org.scalatest" %% "scalatest" % scalatestVersion % Test,
     scalacOptions in Test -= "-Xfatal-warnings",
