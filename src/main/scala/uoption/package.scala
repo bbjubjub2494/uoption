@@ -1,5 +1,8 @@
 package uoption
 
+import impl.{wrap, fold}
+type UOption = impl.UOption
+
 val UNone: UOption[Nothing] = impl.UNone
 
 object USome:

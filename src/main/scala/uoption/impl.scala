@@ -1,13 +1,9 @@
-package uoption
-
-object impl:
-  case object UNone
-  case class WrappedUNone(level: Int):
-    assert(level > 0)
-
-import impl._
+package uoption.impl
 
 opaque type UOption[+A] >: UNone.type = A | UNone.type | WrappedUNone
+case object UNone
+case class WrappedUNone(level: Int):
+  assert(level > 0)
 
 def [A](a: A).wrap: UOption[A] = a match
   case UNone => WrappedUNone(1)
