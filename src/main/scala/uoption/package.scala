@@ -8,7 +8,7 @@ object USome:
   def apply[A](a: A): UOption[A] = wrap(a)
 
 object UOption:
-  def apply[A](a: A | Null) = if a == null then UNone else a.wrap
+  def apply[A](a: A | Null): UOption[A] = if a == null then UNone else wrap(a)
 
 extension UOptionOps on [A](self: UOption[A]):
   def isDefined = self.fold(false)(_ => true)
