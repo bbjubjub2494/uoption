@@ -4,7 +4,6 @@ import org.scalacheck._
 import Gen._, Prop._
 
 object implSpec extends Properties("unboxed option implementation"):
-  import impl._
   property("folding UNone is correct") =
     forAll { (a: Boolean) =>
       Prop.?=(UNone.fold(a)(_ => ???), a)
@@ -14,7 +13,7 @@ object implSpec extends Properties("unboxed option implementation"):
     forAll(choose(0, 64), oneOf(UNone, ())) { (n, a) =>
       def rec[A](n: Int, a: A): A =
         if n > 0 then
-          rec[UOptionImpl[A]](n-1, a.wrap).fold(???)(a => a)
+          fold(rec[UOption[A]](n-1, wrap(a)))(???)(a => a)
         else
           a
       Prop.?=(UNone, rec(n, UNone))
