@@ -26,6 +26,6 @@ extension UOptionFlattenOps on [A <: UOption[B], B](self: UOption[A]):
 extension UOptionNullOps on [A, B >: A | Null](self: UOption[A]):
   def orNull: B = fold[A, B](self)(null)(a => a: B)
 
-extension UOptioMapOps on [A, B](self: UOption[A]):
+extension UOptionMapOps on [A, B](self: UOption[A]):
   def map(f: A => B): UOption[B] = fold(self)(UNone)(a => wrap(f(a)))
   def flatMap(f: A => UOption[B]): UOption[B] = fold(self)(UNone)(a => f(a))
