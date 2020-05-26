@@ -14,6 +14,7 @@ object USome:
 
 object UOption:
   def apply[A](a: A | Null): UOption[A] = if a == null then UNone else wrap(a)
+  def empty[A]: UOption[A] = UNone
 
   extension UOptionOps on [A](self: UOption[A]):
     def isDefined = self.fold(false)(_ => true)
