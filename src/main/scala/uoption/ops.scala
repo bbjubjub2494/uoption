@@ -1,26 +1,22 @@
 package uoption
 
-trait UOptionOps[A] extends Any with IterableOnce[A]:
-  def get: A
+import impl._
+val UNone: UOption[Nothing] = impl.UNone
 
-case object UNone extends UOptionOps[Nothing]:
-  override def knownSize = 0
-  def iterator = Iterator.empty
-  def get: Nothing = throw NoSuchElementException("UNone.get")
-
-case class USome[A](a: A) extends AnyVal with UOptionOps[A]:
-  override def knownSize = 1
-  def iterator: Iterator[A] = Iterator.single(a)
-  def get: A = a
-
-opaque type UOption[+A] >: UNone.type = UOptionImpl[A]
+object USome:
+  def apply[A](a: A): UOption[A] = a.wrap
+  def unapply[A](self: UOption[A]): Option[A] = impl.fold[A, Option[A]](self)(None)(Some[A])
 
 object UOption:
-  extension on [A](self: UOption[A]) {
-    def isEmpty = self.isInstanceOf[UNone.type]
-    def get = self.fold(UNone.get)(a => a)
-    def iterator: Iterator[A] = self.fold(Iterator.empty)(Iterator.single(_))
-  }
+  extension on [A](self: UOption[A]):
+    def isEmpty = self.fold(true)(_ => false)
+    def isDefined = self.fold(false)(_ => true)
+    def getOrElse(default: A) = self.fold(default)(a => a)
+    def get = self.fold(throw NoSuchElementException("UNone.get"))(a => a)
+    //def iterator: Iterator[A] = self.fold[A](Iterator.empty)(Iterator.single)
+
+  extension on [A, B](self: UOption[A]):
+    def map(f: A => B): UOption[B] = self.fold(UNone)(a => USome(f(a)))
 
   def apply[A](a: A | Null) =
     if a == null
