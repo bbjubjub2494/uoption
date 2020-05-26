@@ -1,6 +1,6 @@
 package uoption
 
-import impl.{wrap, fold}
+import impl.{wrap, fold, evSerializable}
 opaque type UOption[+A] = impl.UOption[A]
 private type Sub[A] >: impl.UOption[A] <: UOption[A]
 private type Sup[A] >: UOption[A] <: impl.UOption[A]
@@ -36,3 +36,7 @@ object UOption:
   extension UOptionMapOps on [A, B](self: UOption[A]):
     def map(f: A => B): UOption[B] = fold(self)(UNone)(a => wrap(f(a)))
     def flatMap(f: A => UOption[B]): UOption[B] = fold(self)(UNone)(a => f(a))
+
+given [A <: Serializable] as (UOption[A] <:< Serializable) = evSerializable
+given [A](using ev: A <:< Serializable) as (UOption[A] <:< Serializable) =
+  ev.liftCo[UOption].andThen(evSerializable)
