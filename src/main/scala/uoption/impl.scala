@@ -1,11 +1,11 @@
 package uoption
 
-object internals:
+object impl:
   case object UNone
   case class WrappedUNone(level: Int):
     assert(level > 0)
 
-import internals._
+import impl._
 
 opaque type UOption[+A] >: UNone.type = A | UNone.type | WrappedUNone
 

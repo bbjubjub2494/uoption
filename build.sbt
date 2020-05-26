@@ -12,8 +12,12 @@ lazy val `scala-unboxed-option` = project.
       "-feature",
       "-Xfatal-warnings",
       "-encoding", "utf8",
+      "-Yexplicit-nulls",
     ),
 
     libraryDependencies += "org.scalatest" %% "scalatest" % scalatestVersion % Test,
     scalacOptions in Test -= "-Xfatal-warnings",
+
+    libraryDependencies +=
+      ("org.scalacheck" %% "scalacheck" % "1.14.3" % Test).withDottyCompat(dottyVersion),
   )

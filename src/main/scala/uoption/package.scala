@@ -1,6 +1,6 @@
 package uoption
 
-val UNone: UOption[Nothing] = internals.UNone
+val UNone: UOption[Nothing] = impl.UNone
 
 object USome:
   def unapply[A](oa: UOption[A]): Option[A] =
