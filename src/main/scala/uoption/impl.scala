@@ -6,6 +6,8 @@ case class WrappedUNone(level: Int):
   assert(level > 0)
   override def toString = "USome(" * level + UNone + ")" * level
 
+def empty[A]: UOption[A] = UNone
+
 def [A](a: A).wrap: UOption[A] = a match
   case UNone => WrappedUNone(1)
   case WrappedUNone(l) => WrappedUNone(l+1)
