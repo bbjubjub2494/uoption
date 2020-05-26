@@ -14,7 +14,7 @@ def [A](a: A).wrap: UOption[A] = a match
   case WrappedUNone(l) => WrappedUNone(l+1)
   case a => a
 
-def [A, B](oa: UOption[A]).fold(fa: A => B)(ifEmpty: => B): B = oa match
+def [A, B](oa: UOption[A]).fold(ifEmpty: => B)(fa: A => B): B = oa match
   case UNone => ifEmpty
   case WrappedUNone(1) => fa(UNone.asInstanceOf[A])
   case WrappedUNone(l) => fa(WrappedUNone(l-1).asInstanceOf[A])
