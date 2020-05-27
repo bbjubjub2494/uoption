@@ -1,6 +1,6 @@
 package uoption.impl
 
-import cats.kernel.laws.IsEqArrow
+import cats.laws.IsEqArrow
 
 trait ImplLaws:
   def foldEmpty[A, B](b: B) = empty[A].fold(b)(_ => ???) <-> b

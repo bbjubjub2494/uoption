@@ -1,7 +1,7 @@
 package uoption
 
 import org.scalacheck.Properties
-import cats.kernel.instances.all.{given cats.kernel.Eq[?]}
+import cats.instances.all.{given cats.Eq[?]}
 
 object UOptionSuite extends Properties("uoption"):
   include(impl.ImplTest[Int, Int].all)

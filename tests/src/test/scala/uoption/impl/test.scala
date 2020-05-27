@@ -3,8 +3,8 @@ package uoption.impl
 import org.scalacheck._
 import Prop.forAll
 
-import cats.kernel.Eq
-import cats.kernel.laws.discipline.catsLawsIsEqToProp
+import cats.Eq
+import cats.laws.discipline.catsLawsIsEqToProp
 import org.typelevel.discipline.Laws
 
 object ImplTest extends Laws with ImplLaws:

@@ -26,12 +26,16 @@ lazy val core = (project in file("."))
   .settings(sharedSettings)
   .settings(
     name := "scala-unboxed-option",
-
+  )
+lazy val tests = project
+  .settings(sharedSettings)
+  .settings(
     libraryDependencies += "org.scalatest" %% "scalatest" % scalatestVersion % Test,
     scalacOptions in Test -= "-Xfatal-warnings",
 
     libraryDependencies ++= Seq(
       ("org.scalacheck" %% "scalacheck" % "1.14.3" % Test).withDottyCompat(dottyVersion),
-      ("org.typelevel" %% "cats-kernel-laws" % catsVersion % Test).withDottyCompat(dottyVersion),
+      ("org.typelevel" %% "cats-laws" % catsVersion % Test).withDottyCompat(dottyVersion),
     ),
   )
+  .dependsOn(core, cats)
