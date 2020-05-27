@@ -1,14 +1,16 @@
 package uoption.impl
 
-opaque type UOption[+A] >: UNone.type = A | UNone.type | WrappedUNone
 case object UNone
-case class WrappedUNone(level: Int):
+case class WrappedUNone[+A](level: Int):
   assert(level > 0)
   override def toString = "USome(" * level + UNone + ")" * level
 
+type USome[+A] = A | WrappedUNone[A]
+type UOption[+A] = UNone.type | USome[A]
+
 def empty[A]: UOption[A] = UNone
 
-def [A](a: A).wrap: UOption[A] = a match
+def [A](a: A).wrap: USome[A] = a match
   case UNone => WrappedUNone(1)
   case WrappedUNone(l) => WrappedUNone(l+1)
   case a => a
