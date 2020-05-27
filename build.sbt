@@ -8,7 +8,6 @@ lazy val sharedSettings = Seq(
   scalacOptions ++= Seq(
     "-deprecation",
     "-feature",
-    "-Xfatal-warnings",
     "-encoding", "utf8",
     "-Yexplicit-nulls",
   ),
