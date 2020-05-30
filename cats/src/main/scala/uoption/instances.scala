@@ -14,21 +14,21 @@ private trait EqOption[A: Eq]:
     case _ => false
 
 trait Instances extends Instances0:
-  given [A: Order] as Order[UOption[A]]:
+  given uoptionCatsOrderForUOption[A: Order] as Order[UOption[A]]:
     def compare(x: UOption[A], y: UOption[A]): Int = (x, y) match
       case (UNone, UNone) => 0
       case (UNone, _) => -1
       case (_, UNone) => 1
       case (USome(x), USome(y)) => Order[A].compare(x, y)
 
-  given [A: Semigroup] as Monoid[UOption[A]]:
+  given uoptionCatsMonoidForUOption[A: Semigroup] as Monoid[UOption[A]]:
     inline def empty = UNone
     def combine(x: UOption[A], y: UOption[A]) = (x, y) match
       case (UNone, y) => y
       case (x, UNone) => x
       case (USome(x), USome(y)) => USome(Semigroup[A].combine(x, y))
 
-  given MonadError[UOption, Unit] with Align[UOption] with Alternative[UOption] with CoflatMap[UOption] with CommutativeMonad[UOption] with Traverse[UOption]:
+  given uoptionCatsInstancesForUOption as MonadError[UOption, Unit] with Align[UOption] with Alternative[UOption] with CoflatMap[UOption] with CommutativeMonad[UOption] with Traverse[UOption]:
     inline override def map[A, B](x: UOption[A])(f : A => B): UOption[B] = x.map(f)
     inline def pure[A](a: A): UOption[A] = USome(a)
     inline def flatMap[A, B](x: UOption[A])(f : A => UOption[B]): UOption[B] = x.flatMap(f)
@@ -72,7 +72,7 @@ trait Instances extends Instances0:
       case USome(a) => Applicative[G].map(f(a))(b => USome(b))
 
 trait Instances0 extends Instances1:
-  given [A: PartialOrder] as PartialOrder[UOption[A]]:
+  given uoptionCatsPartialOrderForUOption[A: PartialOrder] as PartialOrder[UOption[A]]:
     def partialCompare(x: UOption[A], y: UOption[A]): Double = (x, y) match
       case (UNone, UNone) => 0
       case (UNone, _) => -1
@@ -80,10 +80,10 @@ trait Instances0 extends Instances1:
       case (USome(x), USome(y)) => PartialOrder[A].partialCompare(x, y)
 
 trait Instances1 extends Instances2:
-  given [A: Hash] as Hash[UOption[A]] with EqOption[A]:
+  given uoptionCatsHashForUOption[A: Hash] as Hash[UOption[A]] with EqOption[A]:
     def hash(x: UOption[A]): Int = x match
       case UNone => x.hashCode
       case USome(x) => Hash[A].hash(x)
 
 trait Instances2:
-  given [A: Eq] as Eq[UOption[A]] with EqOption[A]
+  given uoptionCatsEqForUOption[A: Eq] as Eq[UOption[A]] with EqOption[A]
