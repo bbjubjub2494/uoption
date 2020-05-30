@@ -4,6 +4,7 @@ package object instances extends Instances
 import uoption._
 
 import cats._
+import cats.data.Ior
 
 
 private trait EqOption[A: Eq]:
@@ -27,8 +28,7 @@ trait Instances extends Instances0:
       case (x, UNone) => x
       case (USome(x), USome(y)) => USome(Semigroup[A].combine(x, y))
 
-  // TODO: Alternative, Traverse, CommutativeMonad, CoflatMap, Align
-  given MonadError[UOption, Unit]:
+  given MonadError[UOption, Unit] with Align[UOption] with Alternative[UOption] with CoflatMap[UOption] with CommutativeMonad[UOption] with Traverse[UOption]:
     override def map[A, B](x: UOption[A])(f : A => B): UOption[B] = x.map(f)
     def pure[A](a: A): UOption[A] = USome(a)
     def flatMap[A, B](x: UOption[A])(f : A => UOption[B]): UOption[B] = x.flatMap(f)
@@ -44,6 +44,32 @@ trait Instances extends Instances0:
       case x => x
 
     def raiseError[A](e: Unit): UOption[A] = UNone
+
+    def align[A, B](x: UOption[A], y: UOption[B]): UOption[Ior[A, B]] = (x, y) match
+      case (UNone, UNone) => UNone
+      case (USome(a), UNone) => USome(Ior.Left(a))
+      case (UNone, USome(b)) => USome(Ior.Right(b))
+      case (USome(a), USome(b)) => USome(Ior.Both(a, b))
+    def functor = this
+
+    def coflatMap[A, B](x: UOption[A])(f: UOption[A] => B) =
+      USome(f(x))
+
+    def foldLeft[A, B](x: UOption[A], b: B)(f: (B, A) => B): B = x match
+      case UNone => b
+      case USome(a) => f(b, a)
+
+    def foldRight[A, B](x: UOption[A], b: Eval[B])(f: (A, Eval[B]) => Eval[B]): Eval[B] = x match
+      case UNone => b
+      case USome(a) => f(a, b)
+
+    def empty[A]: UOption[A] = UNone
+
+    def combineK[A](x: UOption[A], y: UOption[A]): UOption[A] = x.orElse(y)
+
+    def traverse[G[_]: Applicative, A, B](x: UOption[A])(f: A => G[B]): G[UOption[B]] = x match
+      case UNone => Applicative[G].pure(UNone)
+      case USome(a) => Applicative[G].map(f(a))(b => USome(b))
 
 trait Instances0 extends Instances1:
   given [A: PartialOrder] as PartialOrder[UOption[A]]:

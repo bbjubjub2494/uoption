@@ -25,6 +25,7 @@ object UOption:
 
   extension UOptionExtractOps on [A, B >: A](self: UOption[A]):
     def getOrElse(default: => B): B = fold[A, B](self)(default)(a => a: B)
+    def orElse(alt: => UOption[B]): UOption[B] = fold(self)(alt)(a => USome(a))
     def toArray(using reflect.ClassTag[B]): Array[B] = fold[A, Array[B]](self)(Array.empty)(a => Array(a))
 
   extension UOptionFlattenOps on [A <: UOption[B], B](self: UOption[A]):
