@@ -28,6 +28,11 @@ trait Instances extends Instances0:
       case (x, UNone) => x
       case (USome(x), USome(y)) => USome(Semigroup[A].combine(x, y))
 
+  given uoptionCatsShowForUOption[A: Show] as Show[UOption[A]]:
+    def show(x: UOption[A]) = x match
+      case UNone => UNone.toString
+      case USome(x) => "USome(" + Show[A].show(x) + ")"
+
   given uoptionCatsInstancesForUOption as MonadError[UOption, Unit] with Align[UOption] with Alternative[UOption] with CoflatMap[UOption] with CommutativeMonad[UOption] with Traverse[UOption]:
     inline override def map[A, B](x: UOption[A])(f : A => B): UOption[B] = x.map(f)
     inline def pure[A](a: A): UOption[A] = USome(a)
