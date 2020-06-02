@@ -1,6 +1,6 @@
 package uoption
 
-import impl.{wrap, fold, evSerializable}
+import impl.{wrap, fold}
 opaque type UOption[+A] = impl.UOption[A]
 private type Sub[A] >: impl.UOption[A] <: UOption[A]
 private type Sup[A] >: UOption[A] <: impl.UOption[A]
@@ -37,6 +37,9 @@ object UOption:
     def map(f: A => B): UOption[B] = fold(self)(UNone)(a => wrap(f(a)))
     def flatMap(f: A => UOption[B]): UOption[B] = fold(self)(UNone)(a => f(a))
 
-given [A <: Serializable] as (UOption[A] <:< Serializable) = evSerializable
-given [A](using ev: A <:< Serializable) as (UOption[A] <:< Serializable) =
-  ev.liftCo[UOption].andThen(evSerializable)
+  /**
+   * [UOption] values are serializable unless they wrap a value that isn't.
+   *
+   * Note that some values such as those of type `USome[Int]` can be safely serialized despite the fact that their type doesn't indicate it.
+   */
+  given uoptionIsSerializableUOption as (UOption[Serializable] <:< Serializable) = <:<.refl
