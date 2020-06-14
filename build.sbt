@@ -1,5 +1,5 @@
 val catsVersion = "2.1.1"
-val dottyVersion = "0.24.0-RC1"
+val dottyVersion = "0.24.0"
 val scalatestVersion = "3.1.2"
 
 lazy val `scala-unboxed-option` = project.
