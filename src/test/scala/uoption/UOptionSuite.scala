@@ -13,3 +13,8 @@ given [A: Arbitrary] as Arbitrary[UOption[A]] = Arbitrary {
 object UOptionSuite extends Properties("uoption"):
   include(impl.ImplTest[Int, Int].all)
   include(SerializableTests[UOption[UOption[UOption[UOption[Int]]]]].all)
+
+  property("regression test for #7") =
+    USome(null) match
+      case USome(null) => true
+      case _ => false
